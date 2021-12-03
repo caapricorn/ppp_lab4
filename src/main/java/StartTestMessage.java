@@ -2,26 +2,25 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
-import java.util.List;
 
 public class StartTestMessage implements Serializable {
 
     private final String packageId;
     private final String jsScript;
     private final String functionName;
-    private final List<Test> tests;
+    private final Test test;
 
     @JsonCreator
     public StartTestMessage(
             @JsonProperty("packageId") String packageId,
             @JsonProperty("jsScript") String jsScript,
             @JsonProperty("functionName") String functionName,
-            @JsonProperty("tests") List<Test> tests
+            @JsonProperty("test") Test test
     ) {
         this.packageId = packageId;
         this.jsScript = jsScript;
         this.functionName = functionName;
-        this.tests = tests;
+        this.test = test;
     }
 
     public String getPackageId() {
@@ -36,7 +35,7 @@ public class StartTestMessage implements Serializable {
         return functionName;
     }
 
-    public List<Test> getTests() {
-        return tests;
+    public Test getTest() {
+        return test;
     }
 }
