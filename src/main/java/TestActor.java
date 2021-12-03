@@ -5,5 +5,7 @@ public class TestActor extends AbstractActor {
 
     private ActorRef storeActor;
 
-    
+    TestActor(ActorRef storeActor) {
+        this.storeActor = storeActor;
+    }
 }
