@@ -30,6 +30,10 @@ public class Test implements Serializable {
         return result;
     }
 
+    public void setResult(String result) {
+        this.result = result;
+    }
+
     public String getExpectedResult() {
         return expectedResult;
     }
