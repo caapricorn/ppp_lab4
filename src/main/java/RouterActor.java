@@ -27,5 +27,10 @@ public class RouterActor extends AbstractActor {
         );
     }
 
-    
+    private void runTests(TestPackage pkg) {
+        for (Test test : pkg.getTests()) {
+            test.setTestPackage(pkg);
+            testActor.tell(test, ActorRef.noSender());
+        }
+    }
 }
