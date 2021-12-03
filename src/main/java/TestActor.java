@@ -8,4 +8,10 @@ public class TestActor extends AbstractActor {
     TestActor(ActorRef storeActor) {
         this.storeActor = storeActor;
     }
+
+    @Override
+    public Receive createReceive() {
+        return receiveBuilder()
+                .match()
+    }
 }
