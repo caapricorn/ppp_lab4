@@ -13,10 +13,10 @@ public class TestPackage implements Serializable {
 
     @JsonCreator
     public TestPackage(
-            @JsonProperty("packageId") String packageId;
-            @JsonProperty("jsScript") String jsScript;
-            @JsonProperty("functionName") String functionName;
-            @JsonProperty("tests") List<Test> tests;
+            @JsonProperty("packageId") String packageId,
+            @JsonProperty("jsScript") String jsScript,
+            @JsonProperty("functionName") String functionName,
+            @JsonProperty("tests") List<Test> tests
     ) {
         this.packageId = packageId;
         this.jsScript = jsScript;
