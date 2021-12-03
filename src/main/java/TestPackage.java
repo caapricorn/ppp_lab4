@@ -35,4 +35,8 @@ public class TestPackage implements Serializable {
     public String getFunctionName() {
         return functionName;
     }
+
+    public List<Test> getTests() {
+        return tests;
+    }
 }
