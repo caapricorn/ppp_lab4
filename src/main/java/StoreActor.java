@@ -25,6 +25,7 @@ public class StoreActor extends AbstractActor {
     public Receive createReceive() {
         return ReceiveBuilder.create()
                 .match(Test.class, t -> this.addTest(t))
-
+                .match(String.class, p -> sender().tell())
+                .build();
     }
 }
