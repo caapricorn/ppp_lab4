@@ -1,4 +1,5 @@
 import akka.actor.AbstractActor;
+import akka.actor.Props;
 import akka.japi.pf.ReceiveBuilder;
 
 import java.util.ArrayList;
@@ -27,5 +28,9 @@ public class StoreActor extends AbstractActor {
                 .match(Test.class, t -> this.addTest(t))
                 .match(String.class, p -> sender().tell())
                 .build();
+    }
+
+    static Props props() {
+        return Props.create(StoreActor.class);
     }
 }
