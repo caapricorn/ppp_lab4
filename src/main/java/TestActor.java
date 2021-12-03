@@ -28,6 +28,8 @@ public class TestActor extends AbstractActor {
     @Override
     public Receive createReceive() {
         return receiveBuilder()
-                .match()
+                .match(StartTestMessage.class,
+                        msg -> storeActor.tell(testRun(msg), ActorRef.noSender()))
+                .build();
     }
 }
