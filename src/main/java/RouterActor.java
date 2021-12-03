@@ -33,4 +33,12 @@ public class RouterActor extends AbstractActor {
             testActor.tell(test, ActorRef.noSender());
         }
     }
+
+    @Override
+    public Receive createReceive() {
+        return receiveBuilder()
+                .match(TestPackage.class, msg -> runTests(msg))
+                .match(String.class, msg -> storeActor.forward(msg, getContext()))
+                .build();
+    }
 }
