@@ -25,4 +25,8 @@ public class Test implements Serializable {
     public String getTestName() {
         return testName;
     }
+
+    public String getExpectedResult() {
+        return expectedResult;
+    }
 }
