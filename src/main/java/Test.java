@@ -45,4 +45,8 @@ public class Test implements Serializable {
     public TestPackage getTestPackage() {
         return testPackage;
     }
+
+    public void setTestPackage(TestPackage testPackage) {
+        this.testPackage = testPackage;
+    }
 }
