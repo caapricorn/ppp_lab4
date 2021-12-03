@@ -13,8 +13,8 @@ public class Test implements Serializable {
 
     @JsonCreator
     public Test(
-            @JsonProperty("testName") ,
-            @JsonProperty("") ,
-            @JsonProperty("")
+            @JsonProperty("testName") String testName,
+            @JsonProperty("expectedResult") String expectedResult,
+            @JsonProperty("params") Object[] params
     )
 }
