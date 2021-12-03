@@ -9,6 +9,8 @@ public class TestActor extends AbstractActor {
         this.storeActor = storeActor;
     }
 
+    private static String testRun()
+
     @Override
     public Receive createReceive() {
         return receiveBuilder()
