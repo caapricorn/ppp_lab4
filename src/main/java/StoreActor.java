@@ -13,5 +13,10 @@ public class StoreActor extends AbstractActor {
         if (this.storage.containsKey(packageId)) {
             this.storage.get(packageId).add(test);
         }
+        else {
+            ArrayList<Test> tests = new ArrayList<>();
+            tests.add(test);
+            this.storage.put(packageId, tests);
+        }
     }
 }
