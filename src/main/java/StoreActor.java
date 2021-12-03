@@ -9,6 +9,9 @@ public class StoreActor extends AbstractActor {
     private Map<String, ArrayList<Test>> storage = new HashMap<>();
 
     private void addTest(Test test) {
-        
+        String packageId = test.getTestPackage().getPackageId();
+        if (this.storage.containsKey(packageId)) {
+            this.storage.get(packageId).add(test);
+        }
     }
 }
