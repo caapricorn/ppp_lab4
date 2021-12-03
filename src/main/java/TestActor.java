@@ -14,12 +14,14 @@ public class TestActor extends AbstractActor {
         this.storeActor = storeActor;
     }
 
-    private static String testRun(TestPackage message) throws ScriptException, NoSuchMethodException {
+    private static String testRun(StartTestMessage message) throws ScriptException, NoSuchMethodException {
         try {
             ScriptEngine engine = new ScriptEngineManager().getEngineByName("nashorn");
             engine.eval(message.getJsScript());
             Invocable invocable = (Invocable) engine;
-            return invocable.invokeFunction(message.getFunctionName(), message.getTests().)
+            return invocable.invokeFunction(message.getFunctionName(), message.getTest().getParams()).toString();
+        } catch (ScriptException | NoSuchMethodException err) {
+            return "ERROR: " + err.getLocalizedMessage();
         }
     }
 
