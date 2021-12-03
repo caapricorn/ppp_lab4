@@ -1,4 +1,5 @@
 import akka.actor.*;
+import akka.routing.RoundRobinPool;
 import scala.concurrent.duration.Duration;
 
 import java.util.Collections;
@@ -6,6 +7,7 @@ import java.util.Collections;
 public class RouterActor extends AbstractActor {
 
     private final int MAX_RETRIES = 10;
+    private final int MAX_WORK = 10;
 
     private ActorRef storeActor;
     private ActorRef testActor;
@@ -17,6 +19,13 @@ public class RouterActor extends AbstractActor {
                 MAX_RETRIES,
                 Duration.create("1 minute"),
                 Collections.singletonList(Exception.class)
-        )
+        );
+        this.testActor = sys.actorOf(
+                new RoundRobinPool(MAX_WORK)
+                        .withSupervisorStrategy(strategy)
+                        .props(Props.create(TestActor.class, storeActor))
+        );
     }
+
+    
 }
