@@ -18,4 +18,12 @@ public class Result implements Serializable {
         this.expectedResult = expectedResult;
         this.success = success;
     }
+
+    public String getResult() {
+        return result;
+    }
+
+    public String getExpectedResult() {
+        
+    }
 }
