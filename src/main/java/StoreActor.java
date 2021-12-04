@@ -32,6 +32,10 @@ public class StoreActor extends AbstractActor {
                 .build();
     }
 
+    private Result get(String packageId) {
+        return new Result()
+    }
+
     static Props props() {
         return Props.create(StoreActor.class);
     }
