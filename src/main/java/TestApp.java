@@ -1,6 +1,8 @@
 import akka.actor.ActorRef;
 import akka.http.javadsl.server.AllDirectives;
 
+import java.io.IOException;
+
 public class TestApp extends AllDirectives {
 
     private static final String HOST = "localhost";
@@ -11,5 +13,9 @@ public class TestApp extends AllDirectives {
 
     private TestApp(ActorRef routeActor) {
         this.routeActor = routeActor;
+    }
+
+    public static void main(String args[]) throws IOException {
+        
     }
 }
