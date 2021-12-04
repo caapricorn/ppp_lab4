@@ -24,6 +24,10 @@ public class Result implements Serializable {
     }
 
     public String getExpectedResult() {
-        
+        return expectedResult;
+    }
+
+    public Boolean getSuccess() {
+        return success;
     }
 }
