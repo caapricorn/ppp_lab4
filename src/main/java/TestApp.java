@@ -69,5 +69,10 @@ public class TestApp extends AllDirectives {
                 ConnectHttp.toHost(HOST, PORT),
                 materializer
         );
+
+        System.out.println("Server online");
+        System.in.read();
+
+        binding.thenCompose(ServerBinding::unbind).thenAccept(unbound -> system.terminate());
     }
 }
