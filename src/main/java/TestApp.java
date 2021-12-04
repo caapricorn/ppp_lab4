@@ -2,8 +2,10 @@ import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
 import akka.http.javadsl.Http;
+import akka.http.javadsl.model.HttpRequest;
 import akka.http.javadsl.server.AllDirectives;
 import akka.stream.ActorMaterializer;
+import akka.stream.javadsl.Flow;
 
 import java.io.IOException;
 
@@ -26,6 +28,8 @@ public class TestApp extends AllDirectives {
         final Http http = Http.get(system);
         final ActorMaterializer materializer = ActorMaterializer.create(system);
 
-        TestApp app = 
+        TestApp app = new TestApp(routeActor);
+
+        final Flow<HttpRequest>
     }
 }
