@@ -40,9 +40,15 @@ public class TestApp extends AllDirectives {
                             return completeOKWithFuture(res, Jackson.marshaller());
                         })
                 )),
-                post()
+                post(() -> path("postPackage", () ->
+                        entity(Jackson.unmarshaller(Package.class),
+                                msg -> {
+                                    routeActor.tell(msg, ActorRef.noSender());
+                                    return complete("Test started \n");
+                                })
+                        )
+                )
         );
-
     }
 
     public static void main(String args[]) throws IOException {
