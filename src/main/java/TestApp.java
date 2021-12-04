@@ -1,9 +1,12 @@
+import akka.NotUsed;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
 import akka.http.javadsl.Http;
 import akka.http.javadsl.model.HttpRequest;
+import akka.http.javadsl.model.HttpResponse;
 import akka.http.javadsl.server.AllDirectives;
+import akka.http.javadsl.server.Route;
 import akka.stream.ActorMaterializer;
 import akka.stream.javadsl.Flow;
 
@@ -21,6 +24,13 @@ public class TestApp extends AllDirectives {
         this.routeActor = routeActor;
     }
 
+    private Route createRoute(ActorSystem system) {
+        return concat(
+                get(() -> pathPrefix("getPackage",
+                        () -> path()))
+        )
+    }
+
     public static void main(String args[]) throws IOException {
         ActorSystem system = ActorSystem.create("test");
         ActorRef routeActor = system.actorOf(Props.create(RouterActor.class, system));
@@ -30,6 +40,6 @@ public class TestApp extends AllDirectives {
 
         TestApp app = new TestApp(routeActor);
 
-        final Flow<HttpRequest>
+        final Flow<HttpRequest, HttpResponse, NotUsed> routeFlow =
     }
 }
