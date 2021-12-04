@@ -4,19 +4,20 @@ import akka.japi.pf.ReceiveBuilder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class StoreActor extends AbstractActor {
 
-    private Map<String, ArrayList<Test>> storage = new HashMap<>();
+    private Map<String, List<Result>> storage = new HashMap<>();
 
-    private void addTest(Test test) {
-        String packageId = test.getTestPackage().getPackageId();
+    private void addTest(Result test) {
+        String packageId = test.getPackageId();
         if (this.storage.containsKey(packageId)) {
             this.storage.get(packageId).add(test);
         }
         else {
-            ArrayList<Test> tests = new ArrayList<>();
+            ArrayList<> tests = new ArrayList<>();
             tests.add(test);
             this.storage.put(packageId, tests);
         }
@@ -27,13 +28,14 @@ public class StoreActor extends AbstractActor {
         return ReceiveBuilder.create()
                 .match(Test.class, t -> this.addTest(t))
                 .match(String.class, p -> sender().tell(
-                        this.get()
+                        this.get(p),
+                        self()
                 ))
                 .build();
     }
 
-    private Result get(String packageId) {
-        return new Result()
+    private Message get(String packageId) {
+        return new Message(packageId, storage.get(packageId));
     }
 
     static Props props() {
