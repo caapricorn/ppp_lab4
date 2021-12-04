@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class StoreActor extends AbstractActor {
 
-    private Map<String, List<Result>> storage = new HashMap<>();
+    private final Map<String, List<Result>> storage = new HashMap<>();
 
     private void addTest(Result test) {
 //        String packageId = test.getPackageId();
@@ -27,7 +27,7 @@ public class StoreActor extends AbstractActor {
     @Override
     public Receive createReceive() {
         return ReceiveBuilder.create()
-                .match(Test.class, t -> this.addTest(t))
+                .match(Result.class, this::addTest)
                 .match(String.class, p -> sender().tell(
                         this.get(p),
                         self()
