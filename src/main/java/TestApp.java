@@ -39,9 +39,10 @@ public class TestApp extends AllDirectives {
                             );
                             return completeOKWithFuture(res, Jackson.marshaller());
                         })
-                ))
-        ),
-        post()
+                )),
+                post()
+        );
+
     }
 
     public static void main(String args[]) throws IOException {
