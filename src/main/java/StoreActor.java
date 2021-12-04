@@ -12,15 +12,16 @@ public class StoreActor extends AbstractActor {
     private Map<String, List<Result>> storage = new HashMap<>();
 
     private void addTest(Result test) {
-        String packageId = test.getPackageId();
-        if (this.storage.containsKey(packageId)) {
-            this.storage.get(packageId).add(test);
-        }
-        else {
-            ArrayList<> tests = new ArrayList<>();
-            tests.add(test);
-            this.storage.put(packageId, tests);
-        }
+//        String packageId = test.getPackageId();
+//        if (this.storage.containsKey(packageId)) {
+//            this.storage.get(packageId).add(test);
+//        }
+//        else {
+//            ArrayList<> tests = new ArrayList<>();
+//            tests.add(test);
+//            this.storage.put(packageId, tests);
+//        }
+        storage.computeIfAbsent(test.getPackageId(), k -> new ArrayList<>()).add(test);
     }
 
     @Override
