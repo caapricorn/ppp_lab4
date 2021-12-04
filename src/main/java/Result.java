@@ -12,6 +12,10 @@ public class Result implements Serializable {
     public Result(
             @JsonProperty("result") String result,
             @JsonProperty("expectedResult") String expectedResult,
-            @JsonProperty("") ,
-    )
+            @JsonProperty("success") Boolean success
+    ) {
+        this.result = result;
+        this.expectedResult = expectedResult;
+        this.success = success;
+    }
 }
