@@ -1,42 +1,30 @@
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.io.Serializable;
-import java.util.List;
 
-public class TestPackage implements Serializable {
-
-    private final String packageId;
-    private final String jsScript;
-    private final String functionName;
-    private final List<Test> tests;
+public class TestPackage {
+    private final String testName;
+    private final Object[] params;
+    private final String expectedResult;
 
     @JsonCreator
-    public TestPackage(
-            @JsonProperty("packageId") String packageId,
-            @JsonProperty("jsScript") String jsScript,
-            @JsonProperty("functionName") String functionName,
-            @JsonProperty("tests") List<Test> tests
-    ) {
-        this.packageId = packageId;
-        this.jsScript = jsScript;
-        this.functionName = functionName;
-        this.tests = tests;
+    public TestPackage(@JsonProperty("testName") String testName,
+                    @JsonProperty("params") Object[] params,
+                    @JsonProperty("expectedResult") String expectedResult) {
+        this.expectedResult =  expectedResult;
+        this.params = params;
+        this.testName = testName;
     }
 
-    public String getPackageId() {
-        return packageId;
+    protected String getTestName() {
+        return testName;
     }
 
-    public String getJsScript() {
-        return jsScript;
+    protected Object[] getParams() {
+        return params;
     }
 
-    public String getFunctionName() {
-        return functionName;
-    }
-
-    public List<Test> getTests() {
-        return tests;
+    protected String getExpectedResult() {
+        return expectedResult;
     }
 }
