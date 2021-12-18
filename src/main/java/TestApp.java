@@ -8,7 +8,6 @@ import akka.http.javadsl.ServerBinding;
 import akka.http.javadsl.marshallers.jackson.Jackson;
 import akka.http.javadsl.model.HttpRequest;
 import akka.http.javadsl.model.HttpResponse;
-import akka.http.javadsl.model.StatusCodes;
 import akka.http.javadsl.server.AllDirectives;
 import akka.http.javadsl.server.Route;
 import akka.pattern.Patterns;
@@ -25,11 +24,12 @@ import java.util.concurrent.CompletionStage;
 
 public class TestApp extends AllDirectives {
     private static final String ACTOR_SYSTEM_NAME = "js_test_app";
+    private static final String LOCAL_HOST = "localhost";
+    private static final int PORT = 8080;
 
     public static void main(String[] args) throws IOException {
         ActorSystem actorSystem = ActorSystem.create(ACTOR_SYSTEM_NAME);
         ActorRef actorRouter = actorSystem.actorOf(Props.create(ActorRouter.class));
-
 
         final Http http = Http.get(actorSystem);
         final ActorMaterializer materializer = ActorMaterializer.create(actorSystem);
@@ -38,7 +38,7 @@ public class TestApp extends AllDirectives {
                 instance.createRoute(actorRouter).flow(actorSystem, materializer);
         final CompletionStage<ServerBinding> binding = http.bindAndHandle(
                 routeFlow,
-                ConnectHttp.toHost("localhost", 8080),
+                ConnectHttp.toHost(LOCAL_HOST, PORT),
                 materializer
         );
         System.out.println("Server online at http://localhost:8080/\nPress RETURN to stop...");

@@ -4,8 +4,6 @@ import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
-import java.util.List;
-import java.util.Locale;
 
 public class ActorTester extends AbstractActor {
     private static final String SCRIPT_ENGINE_NAME = "nashorn";
@@ -66,7 +64,7 @@ public class ActorTester extends AbstractActor {
     static class MessageStoreTestResult {
         private static final String NEW_LINE_CHARACTER = "\n";
 
-        private final String     packageId;
+        private final String packageId;
         private final Result result;
 
         public MessageStoreTestResult(String packageId, String status,

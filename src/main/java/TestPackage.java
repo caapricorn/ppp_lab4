@@ -9,8 +9,8 @@ public class TestPackage {
 
     @JsonCreator
     public TestPackage(@JsonProperty("testName") String testName,
-                    @JsonProperty("params") Object[] params,
-                    @JsonProperty("expectedResult") String expectedResult) {
+                        @JsonProperty("params") Object[] params,
+                        @JsonProperty("expectedResult") String expectedResult) {
         this.expectedResult =  expectedResult;
         this.params = params;
         this.testName = testName;
