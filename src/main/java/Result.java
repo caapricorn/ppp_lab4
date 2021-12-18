@@ -7,6 +7,8 @@ public class Result {
     private final String expectedResult;
     private final String receivedResult;
 
+    private static final String NEW_LINE = "\n";
+
     @JsonCreator
     public Result(@JsonProperty("status") String status,
                       @JsonProperty("testName") String testName,
@@ -36,10 +38,10 @@ public class Result {
 
     @Override
     public String toString() {
-        return "Status: " + status + "\n"
-                + "Test name: " + testName + "\n"
-                + "Expected: " + expectedResult + "\n"
-                + "Received: " + receivedResult + "\n";
+        return "Status: " + status + NEW_LINE
+                + "Test name: " + testName + NEW_LINE
+                + "Expected: " + expectedResult + NEW_LINE
+                + "Received: " + receivedResult + NEW_LINE;
     }
 
 }
