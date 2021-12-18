@@ -1,40 +1,45 @@
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.io.Serializable;
-
-public class Result implements Serializable {
-    private final String packageId;
-    private final String result;
+public class Result {
+    private final String status;
+    private final String testName;
     private final String expectedResult;
-    private final Boolean success;
+    private final String receivedResult;
 
     @JsonCreator
-    public Result(
-            @JsonProperty("packageId") String packageId,
-            @JsonProperty("result") String result,
-            @JsonProperty("expectedResult") String expectedResult,
-            @JsonProperty("success") Boolean success
-    ) {
-        this.packageId = packageId;
-        this.result = result;
+    public Result(@JsonProperty("status") String status,
+                      @JsonProperty("testName") String testName,
+                      @JsonProperty("expectedResult") String expectedResult,
+                      @JsonProperty("receivedResult") String receivedResult) {
+        this.status = status;
+        this.testName = testName;
         this.expectedResult = expectedResult;
-        this.success = success;
+        this.receivedResult = receivedResult;
     }
 
-    public String getPackageId() {
-        return packageId;
+    public String getStatus() {
+        return status;
     }
 
-    public String getResult() {
-        return result;
+    public String getTestName() {
+        return testName;
     }
 
     public String getExpectedResult() {
         return expectedResult;
     }
 
-    public Boolean getSuccess() {
-        return success;
+    public String getReceivedResult() {
+        return receivedResult;
     }
+
+    @Override
+    public String toString() {
+        return "Status: " + status + "\n"
+                + "Test name: " + testName + "\n"
+                + "Expected: " + expectedResult + "\n"
+                + "Received: " + receivedResult + "\n";
+    }
+
 }
