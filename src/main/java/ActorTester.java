@@ -62,7 +62,7 @@ public class ActorTester extends AbstractActor {
     }
 
     static class MessageStoreTestResult {
-        private static final String NEW_LINE_CHARACTER = "\n";
+        private static final String NEW_LINE = "\n";
 
         private final String packageId;
         private final Result result;
@@ -83,7 +83,7 @@ public class ActorTester extends AbstractActor {
 
         @Override
         public String toString() {
-            return "PackageId: " + packageId + NEW_LINE_CHARACTER + result;
+            return "PackageId: " + packageId + NEW_LINE + result;
         }
     }
 }

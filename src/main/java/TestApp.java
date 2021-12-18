@@ -26,6 +26,7 @@ public class TestApp extends AllDirectives {
     private static final String ACTOR_SYSTEM_NAME = "js_test_app";
     private static final String LOCAL_HOST = "localhost";
     private static final int PORT = 8080;
+    private static final int TIME_OUT_MILLIS = 5000;
 
     public static void main(String[] args) throws IOException {
         ActorSystem actorSystem = ActorSystem.create(ACTOR_SYSTEM_NAME);
@@ -66,7 +67,7 @@ public class TestApp extends AllDirectives {
                                             Future<Object> result = Patterns.ask(
                                                     actorRouter,
                                                     new MessageGetTestPackageResult(id),
-                                                    5000
+                                                    TIME_OUT_MILLIS
                                             );
                                             return completeOKWithFuture(result, Jackson.marshaller());
                                         })
