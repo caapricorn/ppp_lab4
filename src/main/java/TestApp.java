@@ -8,71 +8,120 @@ import akka.http.javadsl.ServerBinding;
 import akka.http.javadsl.marshallers.jackson.Jackson;
 import akka.http.javadsl.model.HttpRequest;
 import akka.http.javadsl.model.HttpResponse;
+import akka.http.javadsl.model.StatusCodes;
 import akka.http.javadsl.server.AllDirectives;
 import akka.http.javadsl.server.Route;
 import akka.pattern.Patterns;
 import akka.stream.ActorMaterializer;
 import akka.stream.javadsl.Flow;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import scala.concurrent.Future;
+
 
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.CompletionStage;
 
-import static akka.http.javadsl.server.PathMatchers.segment;
-
 public class TestApp extends AllDirectives {
+    private static final String ACTOR_SYSTEM_NAME = "js_test_app";
 
-    private static final String HOST = "localhost";
-    private static final int PORT = 5000;
-    private static final int TIME_OUT_MILLIS = 5000;
+    public static void main(String[] args) throws IOException {
+        ActorSystem actorSystem = ActorSystem.create(ACTOR_SYSTEM_NAME);
+        ActorRef actorRouter = actorSystem.actorOf(Props.create(ActorRouter.class));
 
-    private ActorRef routeActor;
 
-    private TestApp(ActorRef routeActor) {
-        this.routeActor = routeActor;
+        final Http http = Http.get(actorSystem);
+        final ActorMaterializer materializer = ActorMaterializer.create(actorSystem);
+        TestApp instance = new TestApp();
+        final Flow<HttpRequest, HttpResponse, NotUsed> routeFlow =
+                instance.createRoute(actorRouter).flow(actorSystem, materializer);
+        final CompletionStage<ServerBinding> binding = http.bindAndHandle(
+                routeFlow,
+                ConnectHttp.toHost("localhost", 8080),
+                materializer
+        );
+        System.out.println("Server online at http://localhost:8080/\nPress RETURN to stop...");
+        System.in.read();
+        binding
+                .thenCompose(ServerBinding::unbind)
+                .thenAccept(unbound -> actorSystem.terminate());
+
     }
 
-    private Route createRoute(ActorSystem system) {
-        return concat(
-                get(() -> pathPrefix("getPackage", () ->
-                        path(segment(), (String id) -> {
-                            scala.concurrent.Future<Object> res = Patterns.ask(
-                                    routeActor,
-                                    id,
-                                    TIME_OUT_MILLIS
-                            );
-                            return completeOKWithFuture(res, Jackson.marshaller());
-                        })
-                )),
-                post(() -> path("postPackage", () ->
-                        entity(Jackson.unmarshaller(Package.class),
-                                msg -> {
-                                    routeActor.tell(msg, ActorRef.noSender());
-                                    return complete("Test started \n");
-                                })
+    private Route createRoute(ActorRef actorRouter) {
+        return route(
+                path("test", () ->
+                        route(
+                                post(() ->
+                                        entity(Jackson.unmarshaller(MessageTestsPackage.class), message -> {
+                                            actorRouter.tell(message, ActorRef.noSender());
+                                            return complete("Test started!");
+                                        }))
+                        )),
+                path("result", () ->
+                        route(
+                                get(
+                                        () -> parameter("packageId", (id) -> {
+                                            Future<Object> result = Patterns.ask(
+                                                    actorRouter,
+                                                    new MessageGetTestPackageResult(id),
+                                                    5000
+                                            );
+                                            return completeOKWithFuture(result, Jackson.marshaller());
+                                        })
+                                )
                         )
                 )
         );
     }
 
-    public static void main(String args[]) throws IOException {
-        ActorSystem system = ActorSystem.create("test");
-        ActorRef routeActor = system.actorOf(Props.create(RouterActor.class, system));
+    static class MessageGetTestPackageResult {
+        private final String packageID;
 
-        final Http http = Http.get(system);
-        final ActorMaterializer materializer = ActorMaterializer.create(system);
+        public MessageGetTestPackageResult(String packageID) {
+            this.packageID = packageID;
+        }
 
-        TestApp app = new TestApp(routeActor);
-
-        final Flow<HttpRequest, HttpResponse, NotUsed> routeFlow = app.createRoute(system).flow(system, materializer);
-        final CompletionStage<ServerBinding> binding = http.bindAndHandle(
-                routeFlow,
-                ConnectHttp.toHost(HOST, PORT),
-                materializer
-        );
-
-        System.out.println("Server online");
-        System.in.read();
-
-        binding.thenCompose(ServerBinding::unbind).thenAccept(unbound -> system.terminate());
+        protected String getPackageID() {
+            return packageID;
+        }
     }
+
+    static class MessageTestsPackage {
+        private final String packageID;
+        private final String jsScript;
+        private final String funcName;
+        private final List<TestPackage> tests;
+
+        @JsonCreator
+        public MessageTestsPackage(
+                @JsonProperty("packageId") String packageID,
+                @JsonProperty("jsScript") String jsScript,
+                @JsonProperty("functionName") String funcName,
+                @JsonProperty("tests") List<TestPackage> tests) {
+            this.packageID = packageID;
+            this.funcName = funcName;
+            this.jsScript = jsScript;
+            this.tests = tests;
+        }
+
+        protected List<TestPackage> getTests() {
+            return tests;
+        }
+
+        protected String getPackageID() {
+            return packageID;
+        }
+
+        protected String getJsScript() {
+            return jsScript;
+        }
+
+        protected String getFuncName() {
+            return funcName;
+        }
+    }
+
+
 }

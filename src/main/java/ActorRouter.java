@@ -32,19 +32,19 @@ public class ActorRouter extends AbstractActor {
     public Receive createReceive() {
         return receiveBuilder()
                 .match(
-                        JSTestApp.MessageTestsPackage.class,
+                        TestApp.MessageTestsPackage.class,
                         message -> {
                             String packageId = message.getPackageID();
                             String jsScript = message.getJsScript();
                             String funcName = message.getFuncName();
 
-                            for (TestBody test : message.getTests()) {
+                            for (TestPackage test : message.getTests()) {
                                 router.route(new MessageTest(packageId, jsScript, funcName, test), keeper);
                             }
                         }
                 )
                 .match(
-                        JSTestApp.MessageGetTestPackageResult.class,
+                        TestApp.MessageGetTestPackageResult.class,
                         message -> keeper.tell(message, sender())
                 )
                 .build();
