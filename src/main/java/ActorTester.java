@@ -67,19 +67,19 @@ public class ActorTester extends AbstractActor {
         private static final String NEW_LINE_CHARACTER = "\n";
 
         private final String     packageId;
-        private final TestResult result;
+        private final Result result;
 
         public MessageStoreTestResult(String packageId, String status,
                                       String testName, String expectedResult, String receivedResult) {
             this.packageId = packageId;
-            this.result = new TestResult(status, testName, expectedResult, receivedResult);
+            this.result = new Result(status, testName, expectedResult, receivedResult);
         }
 
         protected String getPackageId() {
             return packageId;
         }
 
-        protected TestResult getTestResult() {
+        protected Result getTestResult() {
             return result;
         }
 
